@@ -15,6 +15,7 @@
 
 constexpr auto width = 1280;
 constexpr auto height = 720;
+constexpr auto scale = 1;
 constexpr auto fov = 47.0;
 
 int main(int argc, char** argv) {
@@ -31,9 +32,11 @@ int main(int argc, char** argv) {
 		return EXIT_FAILURE;
 	}
 
+	SDL_RenderSetScale(renderer, scale, scale);
+
 	SDL_Camera camera{
-		width,
-		height,
+		width / scale,
+		height / scale,
 		fov
 	};
 
