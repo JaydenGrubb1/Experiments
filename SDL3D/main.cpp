@@ -82,14 +82,32 @@ int main(int argc, char** argv) {
 
 	SDL_Mesh plane;
 	plane.vertices = {
-		vec3{-4.0f, 0.0f, -4.0f},
-		vec3{-4.0f, 0.0f, 4.0f},
-		vec3{4.0f, 0.0f, -4.0f},
-		vec3{4.0f, 0.0f, 4.0f}
+		vec3{-1.0f, 0.0f, -1.0f},
+		vec3{-1.0f, 0.0f, 1.0f},
+		vec3{1.0f, 0.0f, -1.0f},
+		vec3{1.0f, 0.0f, 1.0f}
 	};
 	plane.indices = {
 		2, 0, 1,
 		2, 1, 3
+	};
+
+	SDL_Transform cube_transform{
+		vec3{-2.0f, 0.0f, 4.0f},
+		vec3{0.0f, 0.0f, 0.0f},
+		vec3{1.0f, 1.0f, 1.0f}
+	};
+
+	SDL_Transform pyramid_transform{
+		vec3{2.0f, 0.0f, 6.0f},
+		vec3{0.0f, 0.0f, 0.0f},
+		vec3{2.0f, 2.0f, 2.0f}
+	};
+
+	SDL_Transform plane_transform{
+		vec3{0.0f, -1.5f, 5.0f},
+		vec3{0.0f, 0.0f, 0.0f},
+		vec3{4.0f, 1.0f, 4.0f}
 	};
 
 	bool running = true;
@@ -133,16 +151,16 @@ int main(int argc, char** argv) {
 
 		if (!paused) {
 			rotation += 1.0f * dt;
+			cube_transform.rotation = vec3{ rotation, rotation, rotation };
+			pyramid_transform.rotation = vec3{ rotation, rotation, rotation };
 		}
 
-		vec3 rot{ rotation, rotation, rotation };
-
 		SDL_SetRenderDrawColor(renderer, 255, 0, 255, SDL_ALPHA_OPAQUE);
-		SDL_RenderDrawMesh(renderer, &camera, &plane, { 0.0, -1.5f, 5.0f }, {0,0,0}, SDL_CULL_NONE, backedges);
+		SDL_RenderDrawMesh(renderer, &camera, &plane, &plane_transform, SDL_CULL_NONE, backedges);
 		SDL_SetRenderDrawColor(renderer, 255, 255, 0, SDL_ALPHA_OPAQUE);
-		SDL_RenderDrawMesh(renderer, &camera, &cube, { -2.0, 0.0f, 4.0f }, rot, SDL_CULL_BACKFACE, backedges);
+		SDL_RenderDrawMesh(renderer, &camera, &cube, &cube_transform, SDL_CULL_BACKFACE, backedges);
 		SDL_SetRenderDrawColor(renderer, 0, 255, 255, SDL_ALPHA_OPAQUE);
-		SDL_RenderDrawMesh(renderer, &camera, &pyramid, { 2.0, 0.0f, 6.0f }, rot, SDL_CULL_BACKFACE, backedges);
+		SDL_RenderDrawMesh(renderer, &camera, &pyramid, &pyramid_transform, SDL_CULL_BACKFACE, backedges);
 
 		SDL_RenderPresent(renderer);
 	}

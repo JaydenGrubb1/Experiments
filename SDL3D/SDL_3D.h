@@ -21,6 +21,12 @@ struct SDL_Mesh {
 	std::vector<int> indices;
 };
 
+struct SDL_Transform {
+	vec3 position;
+	vec3 rotation;	// TODO: Quaternions
+	vec3 scale;
+};
+
 struct SDL_Camera {
 	int width;
 	int height;
@@ -29,4 +35,4 @@ struct SDL_Camera {
 
 void SDL_RenderDrawDottedLine(SDL_Renderer* renderer, int x0, int y0, int x1, int y1);
 
-void SDL_RenderDrawMesh(SDL_Renderer* renderer, SDL_Camera* cam, SDL_Mesh* mesh, vec3 pos, vec3 rot, SDL_CullType cull = SDL_CULL_BACKFACE, bool backedges = false);
+void SDL_RenderDrawMesh(SDL_Renderer* renderer, SDL_Camera* cam, SDL_Mesh* mesh, SDL_Transform* transform, SDL_CullType cull = SDL_CULL_BACKFACE, bool backedges = false);

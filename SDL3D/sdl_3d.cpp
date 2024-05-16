@@ -57,12 +57,12 @@ void SDL_RenderDrawDottedLine(SDL_Renderer* renderer, int x0, int y0, int x1, in
 	}
 }
 
-void SDL_RenderDrawMesh(SDL_Renderer* renderer, SDL_Camera* cam, SDL_Mesh* mesh, vec3 pos, vec3 rot, SDL_CullType cull, bool backedges) {
+void SDL_RenderDrawMesh(SDL_Renderer* renderer, SDL_Camera* cam, SDL_Mesh* mesh, SDL_Transform* transform, SDL_CullType cull, bool backedges) {
 	for (int i = 0; i < mesh->indices.size(); i += 3) {
 		// calculate global vertex positions
-		vec3 v0 = __rotate(mesh->vertices[mesh->indices[i]], rot) + pos;
-		vec3 v1 = __rotate(mesh->vertices[mesh->indices[i + 1]], rot) + pos;
-		vec3 v2 = __rotate(mesh->vertices[mesh->indices[i + 2]], rot) + pos;
+		vec3 v0 = __rotate(mesh->vertices[mesh->indices[i + 0]] * transform->scale, transform->rotation) + transform->position;
+		vec3 v1 = __rotate(mesh->vertices[mesh->indices[i + 1]] * transform->scale, transform->rotation) + transform->position;
+		vec3 v2 = __rotate(mesh->vertices[mesh->indices[i + 2]] * transform->scale, transform->rotation) + transform->position;
 
 		// project vertices to screen space
 		vec2 p0 = __project(v0, vec2{ cam->width, cam->height }, cam->fov);
