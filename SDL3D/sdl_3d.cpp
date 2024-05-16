@@ -87,7 +87,23 @@ void SDL_RenderDrawMesh(SDL_Renderer* renderer, SDL_Camera* cam, SDL_Mesh* mesh,
 			dotted = true;
 		}
 
-		// draw triangle
+		SDL_Color color;
+		SDL_GetRenderDrawColor(renderer, &color.r, &color.g, &color.b, &color.a);
+		color.r /= 2;
+		color.g /= 2;
+		color.b /= 2;
+
+		// draw triangle face
+		if (!backedges) {
+			SDL_Vertex verts[3];
+			verts[0] = { {p0.x, p0.y}, color, {0.0f, 0.0f} };
+			verts[1] = { {p1.x, p1.y}, color, {0.0f, 0.0f} };
+			verts[2] = { {p2.x, p2.y}, color, {0.0f, 0.0f} };
+			int indix[3] = { 0, 1, 2 };
+			SDL_RenderGeometry(renderer, nullptr, verts, 3, indix, 3);
+		}
+
+		// draw triangle outline
 		if (dotted) {
 			SDL_RenderDrawDottedLine(renderer, p0.x, p0.y, p1.x, p1.y);
 			SDL_RenderDrawDottedLine(renderer, p1.x, p1.y, p2.x, p2.y);
