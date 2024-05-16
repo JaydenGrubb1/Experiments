@@ -66,11 +66,38 @@ int main(int argc, char** argv) {
 		3, 0, 1
 	};
 
+	SDL_Mesh pyramid;
+	pyramid.vertices = {
+		vec3{-0.8f, -0.7f, -0.5f},
+		vec3{0.8f, -0.7f, -0.5f},
+		vec3{0.0f, -0.7f, 1.0f},
+		vec3{0.0f, 0.7f, 0.0f}
+	};
+	pyramid.indices = {
+		0, 2, 1,
+		3, 0, 1,
+		3, 1, 2,
+		3, 2, 0
+	};
+
+	SDL_Mesh plane;
+	plane.vertices = {
+		vec3{-4.0f, 0.0f, -4.0f},
+		vec3{-4.0f, 0.0f, 4.0f},
+		vec3{4.0f, 0.0f, -4.0f},
+		vec3{4.0f, 0.0f, 4.0f}
+	};
+	plane.indices = {
+		2, 0, 1,
+		2, 1, 3
+	};
+
 	bool running = true;
 	auto last_time = std::chrono::high_resolution_clock::now();
 
 	float rotation = 0.0f;
 	bool backedges = false;
+	bool paused = false;
 
 	while (running) {
 		SDL_Event event;
@@ -87,6 +114,9 @@ int main(int argc, char** argv) {
 				case SDLK_k:
 					backedges = !backedges;
 					break;
+				case SDLK_p:
+					paused = !paused;
+					break;
 				}
 			}
 		}
@@ -101,11 +131,18 @@ int main(int argc, char** argv) {
 		double dt = std::chrono::duration<double, std::ratio<1, 1>>(current_time - last_time).count();
 		last_time = current_time;
 
-		rotation += 1.0f * dt;
+		if (!paused) {
+			rotation += 1.0f * dt;
+		}
+
 		vec3 rot{ rotation, rotation, rotation };
 
-		SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
-		SDL_RenderDrawMesh(renderer, &camera, &cube, { 0.0, 0.0f, 3.0f }, rot, SDL_CULL_BACKFACE, backedges);
+		SDL_SetRenderDrawColor(renderer, 255, 0, 255, SDL_ALPHA_OPAQUE);
+		SDL_RenderDrawMesh(renderer, &camera, &plane, { 0.0, -1.5f, 5.0f }, {0,0,0}, SDL_CULL_NONE, backedges);
+		SDL_SetRenderDrawColor(renderer, 255, 255, 0, SDL_ALPHA_OPAQUE);
+		SDL_RenderDrawMesh(renderer, &camera, &cube, { -2.0, 0.0f, 4.0f }, rot, SDL_CULL_BACKFACE, backedges);
+		SDL_SetRenderDrawColor(renderer, 0, 255, 255, SDL_ALPHA_OPAQUE);
+		SDL_RenderDrawMesh(renderer, &camera, &pyramid, { 2.0, 0.0f, 6.0f }, rot, SDL_CULL_BACKFACE, backedges);
 
 		SDL_RenderPresent(renderer);
 	}
