@@ -4,9 +4,6 @@
 #include <iostream>
 #include <vector>
 
-#include <glm/vec2.hpp>
-#include <glm/vec3.hpp>
-#include <glm/mat3x3.hpp>
 #include <SDL.h>
 
 #include "SDL_3D.h";
@@ -94,19 +91,19 @@ int main(int argc, char** argv) {
 
 	SDL_Transform cube_transform{
 		vec3{-2.0f, 0.0f, 4.0f},
-		vec3{0.0f, 0.0f, 0.0f},
+		quat{0.0f, 0.0f, 0.0f, 1.0f},
 		vec3{1.0f, 1.0f, 1.0f}
 	};
 
 	SDL_Transform pyramid_transform{
 		vec3{2.0f, 0.0f, 6.0f},
-		vec3{0.0f, 0.0f, 0.0f},
+		quat{0.0f, 0.0f, 0.0f, 1.0f},
 		vec3{2.0f, 2.0f, 2.0f}
 	};
 
 	SDL_Transform plane_transform{
 		vec3{0.0f, -1.5f, 5.0f},
-		vec3{0.0f, 0.0f, 0.0f},
+		quat{0.0f, 0.0f, 0.0f, 1.0f},
 		vec3{4.0f, 1.0f, 4.0f}
 	};
 
@@ -149,10 +146,12 @@ int main(int argc, char** argv) {
 		double dt = std::chrono::duration<double, std::ratio<1, 1>>(current_time - last_time).count();
 		last_time = current_time;
 
+		//LOG("FPS: {:5.0f} ({:3.2f} ms)", 1.0 / dt, dt * 1000.0);
+
 		if (!paused) {
 			rotation += 1.0f * dt;
-			cube_transform.rotation = vec3{ rotation, rotation, rotation };
-			pyramid_transform.rotation = vec3{ rotation, rotation, rotation };
+			cube_transform.rotation = quat{ vec3{1.0f, rotation, 1.0f} };
+			pyramid_transform.rotation = quat{ vec3{rotation, 1.0f, 0.0f} };
 		}
 
 		SDL_SetRenderDrawColor(renderer, 255, 0, 255, SDL_ALPHA_OPAQUE);

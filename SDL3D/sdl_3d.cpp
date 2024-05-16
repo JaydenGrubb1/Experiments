@@ -2,25 +2,9 @@
 
 #include <glm/mat3x3.hpp>
 
-vec3 __rotate(vec3 vec, vec3 angles, vec3 pivot = { 0, 0, 0 }) {
-	glm::mat3x3 rot{
-		{
-			cos(angles.y) * cos(angles.z),
-			cos(angles.z) * sin(angles.x) * sin(angles.y) - cos(angles.x) * sin(angles.z),
-			cos(angles.x) * cos(angles.z) * sin(angles.y) + sin(angles.x) * sin(angles.z)
-		},
-		{
-			cos(angles.y) * sin(angles.z),
-			cos(angles.x) * cos(angles.z) + sin(angles.x) * sin(angles.y) * sin(angles.z),
-			-cos(angles.z) * sin(angles.x) + cos(angles.x) * sin(angles.y) * sin(angles.z)
-		},
-		{
-			-sin(angles.y),
-			cos(angles.y) * sin(angles.x),
-			cos(angles.x) * cos(angles.y)
-		}
-	};
-	return (rot * (vec - pivot)) + pivot;
+vec3 rotate(vec3 vec, quat rot, vec3 pivot = { 0, 0, 0 }) {
+	vec4 temp = rot * vec4(vec - pivot, 0) * glm::conjugate(rot);
+	return vec3(temp.x, temp.y, temp.z) + pivot;
 }
 
 vec2 __project(vec3 vec, vec2 screen, float fov) {
@@ -60,9 +44,9 @@ void SDL_RenderDrawDottedLine(SDL_Renderer* renderer, int x0, int y0, int x1, in
 void SDL_RenderDrawMesh(SDL_Renderer* renderer, SDL_Camera* cam, SDL_Mesh* mesh, SDL_Transform* transform, SDL_CullType cull, bool backedges) {
 	for (int i = 0; i < mesh->indices.size(); i += 3) {
 		// calculate global vertex positions
-		vec3 v0 = __rotate(mesh->vertices[mesh->indices[i + 0]] * transform->scale, transform->rotation) + transform->position;
-		vec3 v1 = __rotate(mesh->vertices[mesh->indices[i + 1]] * transform->scale, transform->rotation) + transform->position;
-		vec3 v2 = __rotate(mesh->vertices[mesh->indices[i + 2]] * transform->scale, transform->rotation) + transform->position;
+		vec3 v0 = rotate(mesh->vertices[mesh->indices[i + 0]] * transform->scale, transform->rotation) + transform->position;
+		vec3 v1 = rotate(mesh->vertices[mesh->indices[i + 1]] * transform->scale, transform->rotation) + transform->position;
+		vec3 v2 = rotate(mesh->vertices[mesh->indices[i + 2]] * transform->scale, transform->rotation) + transform->position;
 
 		// project vertices to screen space
 		vec2 p0 = __project(v0, vec2{ cam->width, cam->height }, cam->fov);
