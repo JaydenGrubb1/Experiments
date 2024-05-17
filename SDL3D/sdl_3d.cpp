@@ -7,14 +7,14 @@ vec3 rotate(vec3 vec, quat rot, vec3 pivot = { 0, 0, 0 }) {
 	return vec3(temp.x, temp.y, temp.z) + pivot;
 }
 
-vec2 __project(vec3 vec, vec2 screen, float fov) {
-	float aspect = screen.x / screen.y;
-	float scale_x = std::tan(fov * 0.5 * (M_PI / 180));
+vec2 project(vec3 vec, SDL_Camera* cam) {
+	float aspect = (float)cam->width / cam->height;
+	float scale_x = std::tan(cam->fov * 0.5 * (M_PI / 180));
 	float scale_y = scale_x * aspect;
 
 	return vec2{
-		screen.x / 2.0f + (vec.x * scale_x) / (scale_x + vec.z) * screen.x / 2.0f,
-		screen.y / 2.0f - (vec.y * scale_y) / (scale_y + vec.z) * screen.y / 2.0f
+		cam->width / 2.0f + (vec.x * scale_x) / (scale_x + vec.z) * cam->width / 2.0f,
+		cam->height / 2.0f - (vec.y * scale_y) / (scale_y + vec.z) * cam->height / 2.0f
 	};
 }
 
@@ -49,9 +49,9 @@ void SDL_RenderDrawMesh(SDL_Renderer* renderer, SDL_Camera* cam, SDL_Mesh* mesh,
 		vec3 v2 = rotate(mesh->vertices[mesh->indices[i + 2]] * transform->scale, transform->rotation) + transform->position;
 
 		// project vertices to screen space
-		vec2 p0 = __project(v0, vec2{ cam->width, cam->height }, cam->fov);
-		vec2 p1 = __project(v1, vec2{ cam->width, cam->height }, cam->fov);
-		vec2 p2 = __project(v2, vec2{ cam->width, cam->height }, cam->fov);
+		vec2 p0 = project(v0, cam);
+		vec2 p1 = project(v1, cam);
+		vec2 p2 = project(v2, cam);
 
 		// backface culling
 		vec2 edge1 = p1 - p0;
