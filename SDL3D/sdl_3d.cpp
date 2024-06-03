@@ -3,8 +3,7 @@
 #include <glm/mat3x3.hpp>
 
 vec3 rotate(vec3 vec, quat rot, vec3 pivot = { 0, 0, 0 }) {
-	vec4 temp = rot * vec4(vec - pivot, 0) * glm::conjugate(rot);
-	return vec3(temp.x, temp.y, temp.z) + pivot;
+	return vec3(rot * vec4(vec - pivot, 0) * glm::conjugate(rot)) + pivot;
 }
 
 vec2 project(vec3 vec, SDL_Camera* cam) {
