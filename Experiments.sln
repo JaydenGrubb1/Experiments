@@ -5,6 +5,8 @@ VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SDL3D", "SDL3D\SDL3D.vcxproj", "{82C7069A-322D-434B-B3EC-5B5F30D6D56F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VkDraw", "VkDraw\VkDraw.vcxproj", "{C390401B-DEF5-428F-92F8-F178C05B191E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,14 @@ Global
 		{82C7069A-322D-434B-B3EC-5B5F30D6D56F}.Release|x64.Build.0 = Release|x64
 		{82C7069A-322D-434B-B3EC-5B5F30D6D56F}.Release|x86.ActiveCfg = Release|Win32
 		{82C7069A-322D-434B-B3EC-5B5F30D6D56F}.Release|x86.Build.0 = Release|Win32
+		{C390401B-DEF5-428F-92F8-F178C05B191E}.Debug|x64.ActiveCfg = Debug|x64
+		{C390401B-DEF5-428F-92F8-F178C05B191E}.Debug|x64.Build.0 = Debug|x64
+		{C390401B-DEF5-428F-92F8-F178C05B191E}.Debug|x86.ActiveCfg = Debug|Win32
+		{C390401B-DEF5-428F-92F8-F178C05B191E}.Debug|x86.Build.0 = Debug|Win32
+		{C390401B-DEF5-428F-92F8-F178C05B191E}.Release|x64.ActiveCfg = Release|x64
+		{C390401B-DEF5-428F-92F8-F178C05B191E}.Release|x64.Build.0 = Release|x64
+		{C390401B-DEF5-428F-92F8-F178C05B191E}.Release|x86.ActiveCfg = Release|Win32
+		{C390401B-DEF5-428F-92F8-F178C05B191E}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
