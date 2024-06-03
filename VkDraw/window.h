@@ -11,6 +11,11 @@ namespace VkDraw {
 		Window(int width, int hgiht, std::string name);
 		~Window(void);
 
+		Window(const Window&) = delete;
+		Window& operator=(const Window&) = delete;
+
+		bool should_close(void) const { return glfwWindowShouldClose(_window); }
+
 	private:
 		GLFWwindow* _window;
 		const int _width;
